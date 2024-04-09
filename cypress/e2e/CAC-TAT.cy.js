@@ -10,9 +10,14 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
 
     it('preenche os campos obrigatórios e envia o formulário', function(){
-        cy.get('#firstName').click().type('Deivid').should('have.value', 'Deivid')
-        cy.get('#lastName').click().type('Fuzari').should('have.value', 'Fuzari')
-        cy.get('#email').click().type('deivid_fuzari@hotmail.com').should('have.value', 'deivid_fuzari@hotmail.com')
+        cy.get('#firstName').type('Deivid')
+        cy.get('#lastName').type('Fuzari')
+        cy.get('#email').type('deivid_fuzari@hotmail.com')
+        cy.get('#open-text-area').type('Teste')
+
+        cy.get('button[type="submit"]').click()
+
+        cy.get('.success').should('be.visible')
     })
   })
   
