@@ -17,7 +17,6 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail.com')
         cy.get('#open-text-area').type(longtext, {delay: 0})
-
         cy.get('button[type="submit"]').click()
 
         cy.get('.success').should('be.visible')
@@ -67,5 +66,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.error').should('be.visible')
     })
     
+    it.only('envia o formuário com sucesso usando um comando customizado', function() {
+       cy.fillMandatoryFieldsAndSubmit()
+
+       cy.get('.success').should('be.visible')
+    })
   })
   
