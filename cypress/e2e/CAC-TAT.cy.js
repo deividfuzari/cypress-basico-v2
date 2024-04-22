@@ -17,7 +17,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail.com')
         cy.get('#open-text-area').type(longtext, {delay: 0})
-        cy.get('button[type="submit"]').click()
+        //cy.get('button[type="submit"]').click()
+        cy.contains('button', 'Enviar').click()
 
         cy.get('.success').should('be.visible')
     })
@@ -29,7 +30,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail,com') //forcei o email errado. para o teste validar
         cy.get('#open-text-area').type('teste')
-        cy.get('button[type="submit"]').click()
+        //cy.get('button[type="submit"]').click()
+        cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
     })
 
@@ -46,7 +48,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#email').type('deivid_fuzari@hotmail.com')
         cy.get('#open-text-area').type('teste')
         cy.get('#phone-checkbox').click()
-        cy.get('button[type="submit"]').click()
+        //cy.get('button[type="submit"]').click()
+        cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
     })
 
@@ -62,14 +65,23 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     //clicar no botão e o erro aparecer que nao foi preenchido os campos obrigatórios.
 
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function() {
-        cy.get('button[type="submit"]').click()
+        //cy.get('button[type="submit"]').click()
+        cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
     })
     
-    it.only('envia o formuário com sucesso usando um comando customizado', function() {
+    //criei um comando dentro da pasta suporte para preencher os campos obrigatórios, para nao repetir codigo.
+    it('envia o formuário com sucesso usando um comando customizado', function() {
        cy.fillMandatoryFieldsAndSubmit()
 
        cy.get('.success').should('be.visible')
     })
+
+    //usando a funcionalidade select pegando o valor do select e colocando no campo de texto.
+    it.only('seleciona um produto (YouTube) por seu texto', function() {
+        cy.get('select').select('youtube').should('have.value', 'youtube')
+
+    })
+
   })
   
