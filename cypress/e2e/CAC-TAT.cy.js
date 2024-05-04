@@ -47,7 +47,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail.com')
         cy.get('#open-text-area').type('teste')
-        cy.get('#phone-checkbox').click()
+        cy.get('#phone-checkbox').check()
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
@@ -104,13 +104,24 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
     //usando o check e apos usar verificar se todos os radios foi marcado
 
-    it.only('marca cada tipo de atendimento', function(){
+    it('marca cada tipo de atendimento', function(){
         cy.get('input[type="radio"]')
         .should('have.length', 3)
         .each(function($radio){
-            cy.wrap($radio).check()
-            cy.wrap($radio).should('be.checked')
+            cy.wrap($radio).check()         //obs: da pra usar o get aqui
+            cy.wrap($radio).should('be.checked')//obs: da pra usar o get aqui
         })
+    })
+
+    //usando check para marcar todos os checkboxes agora, usando each para passar em todos desmarcar o ultimo.
+
+    it('marca ambos checkboxes, depois desmarca o último', function(){
+        cy.get('input[type="checkbox"]')
+        .check()
+        .should('be.checked')
+        .last()
+        .uncheck()
+        .should('not.be.checked')
     })
   })
   
