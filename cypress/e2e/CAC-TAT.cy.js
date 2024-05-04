@@ -123,5 +123,33 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         .uncheck()
         .should('not.be.checked')
     })
+
+    //selecionar um arquivo da pasta fixtures, usar funcao de callback no should
+
+    it('seleciona um arquivo da pasta fixtures', function(){
+        cy.get('input[type="file"]').selectFile('cypress/fixtures/example.json')
+        .should(function($input){
+            xpect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    //selecionar um arquivo da pasta fixtures, mas dessa vez da maneira "arrastanto o arquivo, com o objeto action"
+
+    it('seleciona um arquivo simulando um drag-and-drop', function(){
+        cy.get('input[type="file"]').selectFile('cypress/fixtures/example.json', {action: 'drag-drop'})
+        .should(function($input){
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    //
+
+    it.only('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function(){
+        cy.fixture('example.json').as('Qualquernome')
+        cy.get('input[type="file"]').selectFile('@Qualquernome')
+        .should(function($input){
+            expect($input[0].files[0].name).to.equal('example.json')
+         })
+    })
   })
   
