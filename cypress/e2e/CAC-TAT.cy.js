@@ -129,7 +129,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     it('seleciona um arquivo da pasta fixtures', function(){
         cy.get('input[type="file"]').selectFile('cypress/fixtures/example.json')
         .should(function($input){
-            xpect($input[0].files[0].name).to.equal('example.json')
+            expect($input[0].files[0].name).to.equal('example.json')
         })
     })
 
@@ -142,14 +142,35 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         })
     })
 
-    //
+    //selecionar um arquivo da pasta fixtures, sem o caminho todo usando fixture, e .as para dar nome a um comando.
 
-    it.only('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function(){
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', function(){
         cy.fixture('example.json').as('Qualquernome')
         cy.get('input[type="file"]').selectFile('@Qualquernome')
         .should(function($input){
             expect($input[0].files[0].name).to.equal('example.json')
          })
+    })
+
+    //aprendendo a verificar um link se ele possui atributo target e valor _blank sem usar o invoke.
+
+    it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', function(){
+        cy.get('a[href="privacy.html"]').should('have.attr', 'target', '_blank')
+    })
+
+    //acessar outra aba do navegador usando o invoke para remover o atributo e o valor do elemento html.
+
+    it('acessa a página da política de privacidade removendo o target e então clicando no link', function(){
+        cy.get('a[href="privacy.html"]').invoke('removeAttr', 'target').click()
+
+        cy.contains('Talking About Testing').should('be.visible')
+    })
+        
+    //testando a página da política de privacidade e interagir com alguma funcionalidade dele.
+    
+    it.only('testa a página da política de privacidade de forma independente', function(){
+        cy.get('a[href="privacy.html"]').invoke('removeAttr', 'target').click()
+        cy.get('#title').should('be.equal', 'CAC TAT - Política de privacidade')
     })
   })
   
