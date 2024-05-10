@@ -1,6 +1,7 @@
 /// <reference types="Cypress" /> ///
 
 describe('Central de Atendimento ao Cliente TAT', function() {
+    const USAR_AVANCO_MS = 3000     //3 segundos em milesegundos
     beforeEach(function(){
         cy.visit('./src/index.html')
     })
@@ -13,19 +14,22 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
     it('preenche os campos obrigatórios e envia o formulário', function(){
         const longtext = 'teste, teste, teste, teste, teste, teste,teste, teste, teste,teste, teste, teste,teste, teste, teste,teste, teste, teste,'  
+        cy.clock()
         cy.get('#firstName').type('Deivid')
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail.com')
         cy.get('#open-text-area').type(longtext, {delay: 0})
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
-
         cy.get('.success').should('be.visible')
+        cy.tick(USAR_AVANCO_MS)
+        cy.get('.success').should('not.be.visible')
     })
 
         //exivir mensagem de erro ao submeter o formulario com um email com formatação inválida
 
     it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
+        cy.clock()
         cy.get('#firstName').type('Deivid')
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail,com') //forcei o email errado. para o teste validar
@@ -33,6 +37,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(USAR_AVANCO_MS)
+        cy.get('.error').should('not.be.visible')
     })
 
         //campo de telefone continua vazio quando preenchido com valor não-numerico
@@ -43,6 +50,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         //clicar no checkbox de telefone para validar a mensagem que aparece no erro.
 
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
+        cy.clock()
         cy.get('#firstName').type('Deivid')
         cy.get('#lastName').type('Fuzari')
         cy.get('#email').type('deivid_fuzari@hotmail.com')
@@ -51,6 +59,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(USAR_AVANCO_MS)
+        cy.get('.error').should('not.be.visible')
     })
 
     // preencher e limpar os campos e depois limpar com .clear
@@ -65,17 +76,23 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     //clicar no botão e o erro aparecer que nao foi preenchido os campos obrigatórios.
 
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function() {
+        cy.clock()
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
         cy.get('.error').should('be.visible')
+        cy.tick(USAR_AVANCO_MS)
+        cy.get('.error').should('not.be.visible')
     })
     
     //criei um comando dentro da pasta suporte para preencher os campos obrigatórios, para nao repetir codigo.
 
     it('envia o formuário com sucesso usando um comando customizado', function() {
-       cy.fillMandatoryFieldsAndSubmit()
+       cy.clock()
+        cy.fillMandatoryFieldsAndSubmit()
 
        cy.get('.success').should('be.visible')
+       cy.tick(USAR_AVANCO_MS)
+       cy.get('.success').should('not.be.visible')
     })
 
     //usando a funcionalidade select pegando o valor do select e colocando no campo de texto.
@@ -173,6 +190,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('h1[id="title"]').invoke('text').should('be.equal', 'CAC TAT - Política de privacidade')
         //cy.contains('CAC TAT - Política de privacidade').should('be.visible')
     })
+                        //finalizado as funcionalidades simples de cypress
+    
+    
   })
   
-                            //finalizado os testes do curso.
+                            
