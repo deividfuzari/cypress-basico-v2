@@ -49,19 +49,22 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     })
         //clicar no checkbox de telefone para validar a mensagem que aparece no erro.
 
-    it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
-        cy.clock()
-        cy.get('#firstName').type('Deivid')
-        cy.get('#lastName').type('Fuzari')
-        cy.get('#email').type('deivid_fuzari@hotmail.com')
-        cy.get('#open-text-area').type('teste')
-        cy.get('#phone-checkbox').check()
-        //cy.get('button[type="submit"]').click()
-        cy.contains('button', 'Enviar').click()
-        cy.get('.error').should('be.visible')
 
-        cy.tick(USAR_AVANCO_MS)
-        cy.get('.error').should('not.be.visible')
+    Cypress._.times(5, function(){
+        it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
+            cy.clock()
+            cy.get('#firstName').type('Deivid')
+            cy.get('#lastName').type('Fuzari')
+            cy.get('#email').type('deivid_fuzari@hotmail.com')
+            cy.get('#open-text-area').type('teste')
+            cy.get('#phone-checkbox').check()
+            //cy.get('button[type="submit"]').click()
+            cy.contains('button', 'Enviar').click()
+            cy.get('.error').should('be.visible')
+    
+            cy.tick(USAR_AVANCO_MS)
+            cy.get('.error').should('not.be.visible')
+        })
     })
 
     // preencher e limpar os campos e depois limpar com .clear
@@ -191,8 +194,24 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         //cy.contains('CAC TAT - Política de privacidade').should('be.visible')
     })
                         //finalizado as funcionalidades simples de cypress
-    
-    
+
+
+    it.only('exibe e esconde as mensagens de sucesso e erro usando o .invoke()', function(){
+        cy.get('.success')
+            .should('not.be.visible')
+            .invoke('show')
+            .should('be.visible')
+            .and('contain', 'Mensagem enviada com sucesso.')
+            .invoke('hide')
+            .should('not.be.visible')
+        cy.get('.error')
+            .should('not.be.visible')
+            .invoke('show')
+            .should('be.visible')
+            .and('contain', 'Valide os campos obrigatórios!')
+            .invoke('hide')
+            .should('not.be.visible')
+    })
   })
   
                             
