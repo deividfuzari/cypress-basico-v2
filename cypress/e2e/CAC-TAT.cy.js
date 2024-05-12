@@ -50,7 +50,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         //clicar no checkbox de telefone para validar a mensagem que aparece no erro.
 
 
-    Cypress._.times(5, function(){
+    Cypress._.times(5, function(){      //biblioteca lodash usando times.
         it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
             cy.clock()
             cy.get('#firstName').type('Deivid')
@@ -196,7 +196,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
                         //finalizado as funcionalidades simples de cypress
 
 
-    it.only('exibe e esconde as mensagens de sucesso e erro usando o .invoke()', function(){
+
+    //aprendendo a usar as funcionalidades invoke('show') e invoke('hide')
+    
+    it('exibe e esconde as mensagens de sucesso e erro usando o .invoke()', function(){
         cy.get('.success')
             .should('not.be.visible')
             .invoke('show')
@@ -211,6 +214,34 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             .and('contain', 'Valide os campos obrigatórios!')
             .invoke('hide')
             .should('not.be.visible')
+    })
+
+    //usando o invoke val para preencher um campo de texto
+
+    it('preenche a area de texto usando o comando invoke', function(){
+        const textValue = Cypress._.repeat('texto do fuzari, ', 10)
+
+       cy.get('#open-text-area').invoke('val', textValue)
+            .should('have.value', textValue)
+
+    })
+
+    //requisição http com GET, depois desestruturar a resposta
+    it('faz uma requisição HTTP', function(){
+        cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+            .should(function(response){
+                const {status, statusText, body} = response
+                expect(status).to.equal(200)
+                expect(statusText).to.equal('OK')
+                expect(body).to.include('CAC TAT')
+            })
+    })
+
+    it.only('encontra o gato escondido', function(){
+        cy.get('#cat').invoke('show')
+            .should('be.visible')
+        cy.get('#title').invoke('text', 'CAT TAT')
+        cy.get('#subtitle').invoke('text', 'Eu 💚 gatos!')
     })
   })
   
