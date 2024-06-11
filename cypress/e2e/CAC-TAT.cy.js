@@ -2,22 +2,29 @@
 
 describe('Central de Atendimento ao Cliente TAT', function() {
     const USAR_AVANCO_MS = 3000     //3 segundos em milesegundos
+    const name = 'Deivid'
+    const last_name = 'Fuzari'
+    const css_first_name = '#firstName'
+    const css_last_name = '#lastName'
+    const css_email = '#email'
+    const email = 'deivid_fuzari@hotmail.com'
+
+
     beforeEach(function(){
         cy.visit('./src/index.html')
     })
         //verificar  se o título da página é "Central de Atendimento ao Cliente TAT"
 
     it('verifica o título da aplicação', function() {
-        cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
+        cy.verificationtitle()
     })
         //preenche os campos obrigatórios e envia o formulario
 
     it('preenche os campos obrigatórios e envia o formulário', function(){
         const longtext = 'teste, teste, teste, teste, teste, teste,teste, teste, teste,teste, teste, teste,teste, teste, teste,teste, teste, teste,'  
         cy.clock()
-        cy.get('#firstName').type('Deivid')
-        cy.get('#lastName').type('Fuzari')
-        cy.get('#email').type('deivid_fuzari@hotmail.com')
+        cy.name_lastname_email({css_first_name: css_first_name , css_last_name: css_last_name, last_name: last_name, name: name, css_email: css_email, email: email})
+        
         cy.get('#open-text-area').type(longtext, {delay: 0})
         //cy.get('button[type="submit"]').click()
         cy.contains('button', 'Enviar').click()
@@ -28,14 +35,14 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
         //exivir mensagem de erro ao submeter o formulario com um email com formatação inválida
 
-    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
+    it.only('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
         cy.clock()
-        cy.get('#firstName').type('Deivid')
-        cy.get('#lastName').type('Fuzari')
-        cy.get('#email').type('deivid_fuzari@hotmail,com') //forcei o email errado. para o teste validar
+        cy.get(css_first_name).type(name)
+        cy.get(css_last_name).type(last_name)
+        cy.get(css_email).type('deivid_fuzari@hotmail,com') //forcei o email errado. para o teste validar
         cy.get('#open-text-area').type('teste')
         //cy.get('button[type="submit"]').click()
-        cy.contains('button', 'Enviar').click()
+        cy.clickonbutton()
         cy.get('.error').should('be.visible')
 
         cy.tick(USAR_AVANCO_MS)
@@ -53,9 +60,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     Cypress._.times(5, function(){      //biblioteca lodash usando times.
         it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
             cy.clock()
-            cy.get('#firstName').type('Deivid')
-            cy.get('#lastName').type('Fuzari')
-            cy.get('#email').type('deivid_fuzari@hotmail.com')
+
+            cy.name_lastname_email({css_first_name: css_first_name , css_last_name: css_last_name, last_name: last_name, name: name, css_email: css_email, email: email})
+            
             cy.get('#open-text-area').type('teste')
             cy.get('#phone-checkbox').check()
             //cy.get('button[type="submit"]').click()
@@ -70,9 +77,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     // preencher e limpar os campos e depois limpar com .clear
     
     it('preenche e limpa os campos nome, sobrenome, email e telefone', function() {
-        cy.get('#firstName').type('Deivid').should('have.value', 'Deivid').clear().should('have.value', '')
-        cy.get('#lastName').type('Fuzari').should('have.value', 'Fuzari').clear().should('have.value', '')
-        cy.get('#email').type('deivid_fuzari@hotmail.com').should('have.value', 'deivid_fuzari@hotmail.com').clear().should('have.value', '')
+        cy.get(css_first_name).type(name).should('have.value', name).clear().should('have.value', '')
+        cy.get(css_last_name).type(last_name).should('have.value', last_name).clear().should('have.value', '')
+        cy.get(css_email).type(email).should('have.value', email).clear().should('have.value', '')
         cy.get('#phone').type('1234567890').should('have.value', '1234567890').clear().should('have.value', '')
     })
 
@@ -237,7 +244,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             })
     })
 
-    it.only('encontra o gato escondido', function(){
+    it('encontra o gato escondido', function(){
         cy.get('#cat').invoke('show')
             .should('be.visible')
         cy.get('#title').invoke('text', 'CAT TAT')

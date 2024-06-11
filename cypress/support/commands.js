@@ -32,3 +32,24 @@ Cypress.Commands.add('fillMandatoryFieldsAndSubmit', function() {
     //cy.get('button[type="submit"]').click()
     cy.contains('button', 'Enviar').click()
 })
+
+Cypress.Commands.add('verificationtitle', function(){
+    cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
+})
+
+Cypress.Commands.add('name_lastname_email', function(data){
+    const banana = data.css_first_name
+    const name = data.name  
+    const css_last_name = data.css_last_name
+    const css_email = data.css_email
+    const last_name = data.last_name
+    const email = data.email
+
+    cy.get(banana).type(name)
+    cy.get(css_last_name).type(last_name)
+    cy.get(css_email).type(email)
+})
+
+Cypress.Commands.add('clickonbutton', function(){
+    cy.contains('button', 'Enviar').click()
+})
