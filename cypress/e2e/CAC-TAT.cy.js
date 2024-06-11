@@ -35,14 +35,19 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
         //exivir mensagem de erro ao submeter o formulario com um email com formatação inválida
 
-    it.only('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
+    it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
         cy.clock()
+
+        const batata = cy.contains('button', 'Enviar').click()
+
         cy.get(css_first_name).type(name)
         cy.get(css_last_name).type(last_name)
         cy.get(css_email).type('deivid_fuzari@hotmail,com') //forcei o email errado. para o teste validar
         cy.get('#open-text-area').type('teste')
         //cy.get('button[type="submit"]').click()
-        cy.clickonbutton()
+        //cy.contains('@enviar')
+        //cy.clickonbutton()
+        batata
         cy.get('.error').should('be.visible')
 
         cy.tick(USAR_AVANCO_MS)
@@ -66,7 +71,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
             cy.get('#open-text-area').type('teste')
             cy.get('#phone-checkbox').check()
             //cy.get('button[type="submit"]').click()
-            cy.contains('button', 'Enviar').click()
+            cy.clickonbutton()
             cy.get('.error').should('be.visible')
     
             cy.tick(USAR_AVANCO_MS)
@@ -88,7 +93,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', function() {
         cy.clock()
         //cy.get('button[type="submit"]').click()
-        cy.contains('button', 'Enviar').click()
+        cy.clickonbutton()
         cy.get('.error').should('be.visible')
         cy.tick(USAR_AVANCO_MS)
         cy.get('.error').should('not.be.visible')
